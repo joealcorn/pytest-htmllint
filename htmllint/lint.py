@@ -35,7 +35,7 @@ class HtmlLintViolation(Exception):
 
 class HtmlItem(pytest.Item, pytest.File):
     def runtest(self):
-        for lineno, line in enumerate(self.fspath.readlines(), start=1):
+        for lineno, line in enumerate(self.fspath.readlines(cr=0), start=1):
             filepath = '/'.join((self.fspath.dirname, self.fspath.basename))
 
             # Check for tabstops
