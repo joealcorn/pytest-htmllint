@@ -5,11 +5,28 @@ def pytest_addoption(parser):
     group = parser.getgroup('general')
     group.addoption('--htmllint', action='store_true', dest='htmllint')
 
+    parser.addini(
+        'htmllint_exclude',
+        type='linelist',
+        help='A list of paths to exclude from HTML linting'
+    )
+
 
 def pytest_collect_file(path, parent):
-    if parent.config.option.htmllint:
-        if path.ext == '.html':
+    conf = parent.config
+    if conf.option.htmllint:
+        if path_is_excluded(path, conf.getini('htmllint_exclude')):
+            return None
+        elif path.ext == '.html':
             return HtmlItem(path, parent)
+            
+
+def path_is_excluded(path, excluded):
+    for dirname in excluded:
+        if path.fnmatch(dirname):
+            return True
+
+    return False
 
 
 class HtmlLintViolation(Exception):
