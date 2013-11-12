@@ -10,6 +10,7 @@ setup(
     entry_points={
         'pytest11': ['name_of_plugin = htmllint.lint']
     },
+    install_requires=['pytest>=2,<3'],
 
     author='Joe Alcorn',
     author_email='joealcorn123@gmail.com',
